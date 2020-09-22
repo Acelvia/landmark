@@ -12,7 +12,7 @@ Serve the application locally:
 Do not install dependencies with yarn or npm use:
 `expo install`
 
-Expo login info: user acelvia, command:
+Expo login info: user command:
 `expo login`
 
 You can logout from expo with:
