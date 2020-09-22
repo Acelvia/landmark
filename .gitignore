@@ -11,3 +11,14 @@ frontend/web-build/
 
 # macOS
 frontend/.DS_Store
+
+
+# Compiled JavaScript files
+**/*.js
+**/*.js.map
+
+# TypeScript v1 declaration files
+typings/
+
+# Node.js dependency directory
+functions/node_modules/
