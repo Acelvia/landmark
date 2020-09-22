@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Dimensions } from "react-native";
 import { withRouter } from "react-router-native";
+import Loading from "../Loading";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
@@ -11,13 +12,14 @@ export function CameraPage() {
   const [hasPermission, setHasPermission] = useState(false);
   const [type, setType] = useState(Camera.Constants.Type.back);
   const [photo, setPhoto] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   let cameraRef: any = null;
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       setHasPermission(status === "granted");
-      console.log(hasPermission);
+      console.log(hasPermission, "has permission");
       console.log(photo !== null, "photo not null");
     })();
   }, []);
@@ -25,8 +27,12 @@ export function CameraPage() {
   const handleOnPress = async () => {
     console.log("handle on press");
     try {
+      setIsLoading(true);
       const _photo = await takePicture();
       setPhoto(_photo);
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 10000);
     } catch (e) {
       console.log(e);
     }
@@ -45,25 +51,28 @@ export function CameraPage() {
     return <Text>No access to camera</Text>;
   }
   return (
-    <View style={styles.container}>
-      <Camera
-        style={styles.container}
-        type={type}
-        ref={(ref) => {
-          cameraRef = ref;
-        }}
-      >
-        <View style={styles.header}>
-          <Text style={styles.headerText}>Is this a land mark ?</Text>
-        </View>
-        <View style={styles.cameraBtnContainer}>
-          <TouchableOpacity
-            style={styles.cameraBtn}
-            onPress={handleOnPress}
-          ></TouchableOpacity>
-        </View>
-      </Camera>
-    </View>
+    <>
+      {isLoading ? <Loading width={width} height={height} /> : <></>}
+      <View style={styles.container}>
+        <Camera
+          style={styles.container}
+          type={type}
+          ref={(ref) => {
+            cameraRef = ref;
+          }}
+        >
+          <View style={styles.header}>
+            <Text style={styles.headerText}>Is this a land mark ?</Text>
+          </View>
+          <View style={styles.cameraBtnContainer}>
+            <TouchableOpacity
+              style={styles.cameraBtn}
+              onPress={handleOnPress}
+            ></TouchableOpacity>
+          </View>
+        </Camera>
+      </View>
+    </>
   );
 }
 
