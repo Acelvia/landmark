@@ -4,6 +4,6 @@ export const vision = {
 };
 const URL =
   "https://us-central1-landmark-e738f.cloudfunctions.net/validateLandmark"; //"http://localhost:5001/landmark-e738f/us-central1/validateLandmark";
-async function validateLandmark(): Promise<any> {
-  return await http.get(`${URL}`);
+async function validateLandmark(photoId: string): Promise<any> {
+  return await http.post(`${URL}`, { photoId });
 }

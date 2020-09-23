@@ -1,13 +1,12 @@
 import * as functions from "firebase-functions";
-// import * as admin from "firebase-admin";
-// const serviceAccount = require("../../keys/landmark_key.json");
-/*
+/*import * as admin from "firebase-admin";
+const serviceAccount = require("../../keys/landmark_key.json");
+
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://landmark-e738f.firebaseio.com",
 });
 */
-
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
 //
@@ -21,9 +20,10 @@ exports.validateLandmark = functions.https.onRequest(async (req, res) => {
   // Creates a client
   const client = new vision.ImageAnnotatorClient();
   try {
+    console.log(req.body);
     // Performs label detection on the image file
     const bucketName = "landmark-e738f.appspot.com/uploads";
-    const fileName = "photo.jpg";
+    const fileName = `${req.body.photoId}.jpg`;
     const [result] = await client.landmarkDetection(
       `gs://${bucketName}/${fileName}`
     );

@@ -45,7 +45,7 @@ export function CameraPage() {
       const photoId = `${anonymousUser.uid}${Date.now()}`;
       const snapshot = await uploadToFirebase(blob, photoId);
       // Api request here
-      const landmarkRes = await vision.validateLandmark();
+      const landmarkRes = await vision.validateLandmark(photoId);
       console.log(landmarkRes, "landmarkRes");
       // show new screen with data
     } catch (error) {
