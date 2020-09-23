@@ -6,59 +6,17 @@ import Header from "../Header";
 import LandmarkCamera from "../LandmarkCamera";
 import Loading from "../Loading";
 import { vision } from "../../helpers/api/vision";
-import Firebase from "../../helpers/firebase";
 import useFirebaseAuthentication from "../../hooks";
+import { uploadToFirebase, uriToBlob } from "./helpers";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
 
 export function CameraPage() {
   const [isLoading, setIsLoading] = useState(false);
-  const [photo, setPhoto] = useState(null);
-  const anonymousUser = useFirebaseAuthentication();
+  // const [photo, setPhoto] = useState(null);
+  const anonymousUser: any = useFirebaseAuthentication();
   let cameraRef: any = null;
-
-  const uriToBlob = (uri: string) => {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest();
-
-      xhr.onload = function () {
-        // return the blob
-        resolve(xhr.response);
-      };
-      xhr.onerror = function () {
-        // something went wrong
-        reject(new Error("uriToBlob failed"));
-      };
-
-      // this helps us get a blob
-      xhr.responseType = "blob";
-
-      xhr.open("GET", uri, true);
-      xhr.send(null);
-    });
-  };
-
-  const uploadToFirebase = (blob: any) => {
-    return new Promise((resolve, reject) => {
-      console.log(anonymousUser);
-      var storageRef = Firebase.storage().ref();
-
-      storageRef
-        .child("uploads/photo.jpg")
-        .put(blob, {
-          contentType: "image/jpeg",
-        })
-        .then((snapshot) => {
-          blob.close();
-
-          resolve(snapshot);
-        })
-        .catch((error) => {
-          reject(error);
-        });
-    });
-  };
 
   const handleOnPress = async () => {
     try {
@@ -78,14 +36,18 @@ export function CameraPage() {
   };
 
   const handleNewPhoto = async (newPhoto: any) => {
-    setPhoto(newPhoto);
     try {
+      if (!anonymousUser) {
+        throw new Error("No user");
+      }
       // Send photo file to backend and use vision api to validate if its a landmark or not
       const blob = await uriToBlob(newPhoto.uri);
-      const snapshot = await uploadToFirebase(blob);
+      const photoId = `${anonymousUser.uid}${Date.now()}`;
+      const snapshot = await uploadToFirebase(blob, photoId);
       // Api request here
       const landmarkRes = await vision.validateLandmark();
       console.log(landmarkRes, "landmarkRes");
+      // show new screen with data
     } catch (error) {
       console.log(error);
     }

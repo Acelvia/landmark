@@ -14,5 +14,4 @@ const useFirebaseAuthentication = () => {
 
   return authUser;
 };
-
 export default useFirebaseAuthentication;

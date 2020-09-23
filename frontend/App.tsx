@@ -1,11 +1,8 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { NativeRouter } from "react-router-native";
 import { Routes } from "./components/Routes/Routes";
-import { AuthContext } from "./context/AuthContext";
-import Firebase from "./helpers/firebase";
-import useFirebaseAuthentication from "./hooks";
 
 export default function App() {
   return (
