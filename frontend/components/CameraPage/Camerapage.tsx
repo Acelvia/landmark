@@ -5,9 +5,9 @@ import CircleButton from "../CircleButton";
 import Header from "../Header";
 import LandmarkCamera from "../LandmarkCamera";
 import Loading from "../Loading";
-import * as firebase from "firebase/app";
-import "firebase/storage";
 import { vision } from "../../helpers/api/vision";
+import Firebase from "../../helpers/firebase";
+import useFirebaseAuthentication from "../../hooks";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
@@ -15,6 +15,7 @@ const height = Dimensions.get("window").height; //full height
 export function CameraPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [photo, setPhoto] = useState(null);
+  const anonymousUser = useFirebaseAuthentication();
   let cameraRef: any = null;
 
   const uriToBlob = (uri: string) => {
@@ -40,7 +41,8 @@ export function CameraPage() {
 
   const uploadToFirebase = (blob: any) => {
     return new Promise((resolve, reject) => {
-      var storageRef = firebase.storage().ref();
+      console.log(anonymousUser);
+      var storageRef = Firebase.storage().ref();
 
       storageRef
         .child("uploads/photo.jpg")
@@ -62,10 +64,8 @@ export function CameraPage() {
     try {
       setIsLoading(true);
       const newPhoto = await takePhoto();
-      handleNewPhoto(newPhoto);
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 2000);
+      await handleNewPhoto(newPhoto);
+      setIsLoading(false);
     } catch (e) {
       console.log(e);
     }
@@ -89,8 +89,7 @@ export function CameraPage() {
     } catch (error) {
       console.log(error);
     }
-    // Maybe delete photo after validation
-    console.log("Photo", newPhoto);
+    // Maybe delete photo
   };
 
   const setLandmarkCameraRef = (ref: any) => {
