@@ -7,6 +7,7 @@ import LandmarkCamera from "../LandmarkCamera";
 import Loading from "../Loading";
 import * as firebase from "firebase/app";
 import "firebase/storage";
+import { vision } from "../../helpers/api/vision";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
@@ -24,7 +25,6 @@ export function CameraPage() {
         // return the blob
         resolve(xhr.response);
       };
-
       xhr.onerror = function () {
         // something went wrong
         reject(new Error("uriToBlob failed"));
@@ -65,7 +65,7 @@ export function CameraPage() {
       handleNewPhoto(newPhoto);
       setTimeout(() => {
         setIsLoading(false);
-      }, 10000);
+      }, 2000);
     } catch (e) {
       console.log(e);
     }
@@ -79,11 +79,16 @@ export function CameraPage() {
 
   const handleNewPhoto = async (newPhoto: any) => {
     setPhoto(newPhoto);
-    // Send photo file to backend and use vision api to validate if its a landmark or not
-    const blob = await uriToBlob(newPhoto.uri);
-    const snapshot = await uploadToFirebase(blob);
-    // Api request here
-    console.log(snapshot, "File uploaded");
+    try {
+      // Send photo file to backend and use vision api to validate if its a landmark or not
+      const blob = await uriToBlob(newPhoto.uri);
+      const snapshot = await uploadToFirebase(blob);
+      // Api request here
+      const landmarkRes = await vision.validateLandmark();
+      console.log(landmarkRes, "landmarkRes");
+    } catch (error) {
+      console.log(error);
+    }
     // Maybe delete photo after validation
     console.log("Photo", newPhoto);
   };
