@@ -22,3 +22,7 @@ typings/
 
 # Node.js dependency directory
 functions/node_modules/
+
+keys
+keys/
+**/keys/*.json
