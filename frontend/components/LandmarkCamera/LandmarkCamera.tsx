@@ -53,6 +53,8 @@ export function LandmarkCamera({ onPhoto, children }: any) {
         ratios[ratios.length - 1];
       setRatio(ratio);
       setIsCameraReady(true);
+    } else {
+      setIsCameraReady(true);
     }
   }
 
