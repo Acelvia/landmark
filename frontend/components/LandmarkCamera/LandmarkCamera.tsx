@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Camera } from "expo-camera";
-import { View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
 import { CircleButton } from "../CircleButton/CircleButton";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
+const DESIRED_RATIO = "16:9";
 
 export function LandmarkCamera({ onPhoto, children }: any) {
   const [hasPermission, setHasPermission] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
+  const [ratio, setRatio] = useState("");
   let cameraRef: any = null;
   let componentWillUnmount = false;
+
   useEffect(() => {
     handleCameraPermission();
 
@@ -40,9 +43,19 @@ export function LandmarkCamera({ onPhoto, children }: any) {
     onPhoto(newPhoto);
   }
 
-  if (hasPermission === null) {
-    return <View />;
+  async function prepareRatio() {
+    if (Platform.OS === "android" && cameraRef) {
+      const ratios = await cameraRef.getSupportedRatiosAsync();
+      // See if the current device has your desired ratio, otherwise get the maximum supported one
+      // Usually the last element of "ratios" is the maximum supported ratio
+      const ratio =
+        ratios.find((ratio: string) => ratio === DESIRED_RATIO) ||
+        ratios[ratios.length - 1];
+      setRatio(ratio);
+      setIsCameraReady(true);
+    }
   }
+
   if (hasPermission === false) {
     return (
       <View style={styles.centerTextContainer}>
@@ -52,9 +65,10 @@ export function LandmarkCamera({ onPhoto, children }: any) {
   }
   return (
     <Camera
-      style={styles.container}
+      ratio={ratio}
+      style={{ ...styles.container }}
       type={Camera.Constants.Type.back}
-      onCameraReady={() => setIsCameraReady(true)}
+      onCameraReady={() => prepareRatio()}
       ref={(ref) => {
         cameraRef = ref;
       }}
