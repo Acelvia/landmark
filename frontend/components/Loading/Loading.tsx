@@ -12,8 +12,8 @@ export function Loading({ width, height }: any) {
         width,
         height,
         position: "absolute",
-        zIndex: 1,
-        top: 0,
+        zIndex: 5,
+        bottom: 0,
         left: 0,
         backgroundColor: "rgba(0,0,0,0.1)",
       }}
@@ -22,6 +22,8 @@ export function Loading({ width, height }: any) {
         containerStyle={{
           margin: 0,
           padding: 0,
+          width,
+          height,
           backgroundColor: "rgba(0,0,0,0.1)",
         }}
         source={{
