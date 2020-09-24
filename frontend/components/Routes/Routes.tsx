@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
-import AsyncStorage from "@react-native-community/async-storage";
-import { Route, useHistory } from "react-router-native";
-import { PrivateRoute } from "./PrivateRoute";
+import { Route, Switch, useHistory } from "react-router-native";
 import CameraPage from "../CameraPage";
-import { auth } from "../../helpers/api/auth";
 import VotingPage from "../VotingPage";
-import { CurrentPhotoContext } from "../../context/CurrentPhotoContext";
+import { CurrentPhotoDataContext } from "../../context/CurrentPhotoDataContext";
 
 export function Routes(props: any) {
-  const [imageLocation, setImageLocation] = useState("");
-  const handleImageLocation = (image: string) => {
-    setImageLocation(image);
-  };
+  const [photoData, setPhotoData]: any = useState({ uri: "", landmarks: [] });
+  const history = useHistory();
+
+  useEffect(() => {
+    if (photoData.uri) {
+      history.push("/vote");
+    }
+  }, [photoData.uri]);
+
+  function handleImageLocation(photoData: any) {
+    setPhotoData(photoData);
+  }
+
   return (
-    <CurrentPhotoContext.Provider value={imageLocation}>
-      <View>
+    <CurrentPhotoDataContext.Provider
+      value={{ uri: photoData.uri, landmarks: [] }}
+    >
+      <Switch>
         <Route
           path="/"
           exact
-          component={() => <CameraPage imageLocation={handleImageLocation} />}
+          component={() => <CameraPage handlePhotoData={handleImageLocation} />}
         />
         <Route path="/vote" component={() => <VotingPage />} />
-      </View>
-    </CurrentPhotoContext.Provider>
+      </Switch>
+    </CurrentPhotoDataContext.Provider>
   );
 }

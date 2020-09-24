@@ -3,15 +3,21 @@ import { View, StyleSheet, TouchableOpacity } from "react-native";
 
 export function CircleButton({ handleOnPress, disabled }: any) {
   return (
-    <View style={styles.cameraBtnContainer}>
-      <TouchableOpacity
-        disabled={disabled}
-        style={styles.cameraBtn}
-        onPress={() => handleOnPress()}
-      >
-        <View style={styles.cameraBtnInner}></View>
-      </TouchableOpacity>
-    </View>
+    <>
+      {!disabled ? (
+        <View style={styles.cameraBtnContainer}>
+          <TouchableOpacity
+            disabled={disabled}
+            style={styles.cameraBtn}
+            onPress={() => handleOnPress()}
+          >
+            <View style={styles.cameraBtnInner}></View>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
 

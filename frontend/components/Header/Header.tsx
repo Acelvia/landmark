@@ -2,10 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 const width = Dimensions.get("window").width;
 
-export function Header() {
+export function Header({ text }: any) {
   return (
     <View style={styles.header}>
-      <Text style={styles.headerText}>Is this a land mark ?</Text>
+      <Text style={styles.headerText}>{text}</Text>
     </View>
   );
 }

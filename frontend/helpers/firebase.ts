@@ -32,3 +32,13 @@ export const deleteImage = (photoId: string): Promise<any> => {
       });
   });
 };
+
+export const signInAnonymously = (): void => {
+  Firebase.auth()
+    .signInAnonymously()
+    .catch((error: any) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error(errorMessage);
+    });
+};
