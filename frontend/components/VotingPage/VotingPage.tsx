@@ -19,6 +19,9 @@ const height = Dimensions.get("window").height; //full height
 export function VotingPage() {
   const [base64Image, setBase64Image] = useState("");
   const [userSelection, setUserSelection] = useState(0);
+  const [disableVoteButton, setDisableVoteButton] = useState(false);
+  const [selectedNo, setSelectedNo] = useState(false);
+  const [selectedYes, setSelectedYes] = useState(false);
   const history = useHistory();
   const { uri, landmarks }: any = useContext(CurrentPhotoDataContext);
   const setBase64Async = async (location: string) => {
@@ -34,23 +37,47 @@ export function VotingPage() {
 
   function handleOnPress(selection: number) {
     setUserSelection(selection);
+    setDisableVoteButton(true);
   }
 
-  function setImageHeaderText(): string {
+  function setImageHeaderText(): any {
     switch (userSelection) {
-      case 1: // I dont think its a landmark
-        if (!landmarks || landmarks.length === 0) {
-          return "It is not a landmark ✔";
-        }
-        return "It is a landmark! ✘";
       case 2: // I think its a landmark
         if (!landmarks || landmarks.length === 0) {
-          return "It is not a landmark ✘";
+          return (
+            <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
+              {"It is not a landmark!"}
+              <Text style={{ color: "#ED2939" }}> ✘</Text>
+            </Text>
+          );
         }
-        return "It is a landmark! ✔";
-
+        return (
+          <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
+            {"It is a landmark! "}
+            <Text style={{ color: "#28a745" }}>✔</Text>
+          </Text>
+        );
+      case 1: // I dont think its a landmark
+        if (!landmarks || landmarks.length === 0) {
+          return (
+            <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
+              {"It is not a landmark! "}
+              <Text style={{ color: "#28a745" }}>✔</Text>
+            </Text>
+          );
+        }
+        return (
+          <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
+            {"It is a landmark!"}
+            <Text style={{ color: "#ED2939" }}>✘</Text>
+          </Text>
+        );
       default:
-        return "Is it a landmark ?";
+        return (
+          <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
+            {"Is it a landmark ?"}
+          </Text>
+        );
     }
   }
 
@@ -58,9 +85,8 @@ export function VotingPage() {
     <View style={styles.outerContainer}>
       <Header text={"Read more"} />
       <View style={styles.container}>
-        <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
-          {setImageHeaderText()}
-        </Text>
+        {setImageHeaderText()}
+
         {uri ? (
           <Image
             style={{ width: 300, height: 320, ...styles.flexChildGap }}
@@ -73,23 +99,53 @@ export function VotingPage() {
           Select and see what Google thinks
         </Text>
         <TouchableOpacity
-          style={{ ...styles.voteBtn, ...styles.flexChildGap }}
-          onPress={() => handleOnPress(2)}
+          disabled={disableVoteButton}
+          style={
+            selectedYes
+              ? { ...styles.selectedVoteBtn, ...styles.flexChildGap }
+              : { ...styles.voteBtn, ...styles.flexChildGap }
+          }
+          onPress={() => {
+            handleOnPress(2);
+            setSelectedYes(true);
+          }}
         >
-          <Text style={styles.voteBtnText}>I think it's a landmark</Text>
+          <Text
+            style={
+              selectedYes ? styles.selectedVoteBtnText : styles.voteBtnText
+            }
+          >
+            I think it's a landmark
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{
-            ...styles.voteBtn,
-            ...styles.flexChildGap,
-            marginBottom: 35,
+          disabled={disableVoteButton}
+          style={
+            selectedNo
+              ? {
+                  ...styles.selectedVoteBtn,
+                  ...styles.flexChildGap,
+                  marginBottom: 35,
+                }
+              : {
+                  ...styles.voteBtn,
+                  ...styles.flexChildGap,
+                  marginBottom: 35,
+                }
+          }
+          onPress={() => {
+            handleOnPress(1);
+            setSelectedNo(true);
           }}
-          onPress={() => handleOnPress(1)}
         >
-          <Text style={styles.voteBtnText}>I don't think it's a landmark</Text>
+          <Text
+            style={selectedNo ? styles.selectedVoteBtnText : styles.voteBtnText}
+          >
+            I don't think it's a landmark
+          </Text>
         </TouchableOpacity>
         {/* Button ignoring last char for some reason */}
-        <Button title="backk" onPress={() => history.push("/")}></Button>
+        <Button title="back " onPress={() => history.push("/")}></Button>
       </View>
     </View>
   );
@@ -135,8 +191,23 @@ const styles = StyleSheet.create({
     width: 300,
     marginBottom: 5,
   },
+  selectedVoteBtn: {
+    borderRadius: 20,
+    borderColor: "#fff",
+    backgroundColor: "#fff",
+    borderWidth: 1,
+    paddingHorizontal: 30,
+    paddingVertical: 10,
+    width: 300,
+    marginBottom: 5,
+  },
   voteBtnText: {
     color: "#fff",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  selectedVoteBtnText: {
+    color: "#000",
     fontWeight: "bold",
     textAlign: "center",
   },
