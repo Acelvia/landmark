@@ -18,36 +18,3 @@ const firebaseConfig = {
 // Initialize Firebase
 const Firebase = firebase.initializeApp(firebaseConfig);
 export default Firebase;
-
-export const uploadImage = (blob: any, photoId: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    var storageRef = firebase.storage().ref();
-
-    storageRef
-      .child(`uploads/${photoId}.jpg`)
-      .put(blob, {
-        contentType: "image/jpeg",
-      })
-      .then((snapshot) => {
-        blob.close();
-
-        resolve(snapshot);
-      })
-      .catch((error) => {
-        reject(error);
-      });
-  });
-};
-
-export const deleteImage = (photoId: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    var storageRef = firebase.storage().ref();
-    storageRef
-      .child(`uploads/${photoId}.jpg`)
-      .delete()
-      .then(() => resolve())
-      .catch((error) => {
-        reject(error);
-      });
-  });
-};
