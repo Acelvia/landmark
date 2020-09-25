@@ -19,3 +19,9 @@ You can logout from expo with:
 `expo logout`
 
 More commands can be found here: https://docs.expo.io/workflow/expo-cli/
+
+## Troubleshooting
+
+If you get a react native version mismatch then try this:
+`expo install react-native `
+
