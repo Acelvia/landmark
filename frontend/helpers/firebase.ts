@@ -1,4 +1,4 @@
-import Firebase from "./firebase_init";
+import Firebase, { db } from "./firebase_init";
 
 export const uploadImage = (blob: any, photoId: string): Promise<any> => {
   return new Promise((resolve, reject) => {
@@ -41,4 +41,26 @@ export const signInAnonymously = (): void => {
       const errorMessage = error.message;
       console.error(errorMessage);
     });
+};
+
+export const saveUserCorrectSelection = async (
+  landmarkDescription: string,
+  userUid: string
+): Promise<any> => {
+  await db
+    .collection("landmarks")
+    .doc(landmarkDescription)
+    .collection("correct_answers")
+    .add({ userUid });
+};
+
+export const saveUserIncorrectSelection = async (
+  landmarkDescription: string,
+  userUid: string
+): Promise<any> => {
+  await db
+    .collection("landmarks")
+    .doc(landmarkDescription)
+    .collection("incorrect_answers")
+    .add({ userUid });
 };

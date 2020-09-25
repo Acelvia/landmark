@@ -9,7 +9,12 @@ import {
   Button,
 } from "react-native";
 import { useHistory } from "react-router-native";
+import { AuthContext } from "../../context/AuthContext";
 import { CurrentPhotoDataContext } from "../../context/CurrentPhotoDataContext";
+import {
+  saveUserCorrectSelection,
+  saveUserIncorrectSelection,
+} from "../../helpers/firebase";
 import { uriToBase64 } from "../../helpers/uri";
 import Header from "../Header";
 
@@ -23,6 +28,7 @@ export function VotingPage() {
   const [selectedNo, setSelectedNo] = useState(false);
   const [selectedYes, setSelectedYes] = useState(false);
   const history = useHistory();
+  const userId = useContext(AuthContext);
   const { uri, landmarks }: any = useContext(CurrentPhotoDataContext);
   const setBase64Async = async (location: string) => {
     try {
@@ -51,6 +57,8 @@ export function VotingPage() {
             </Text>
           );
         }
+        // Confirmed it is a landmark
+        saveUserCorrectSelection(landmarks[0].description, userId);
         return (
           <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
             {"It is a landmark! "}
@@ -66,6 +74,8 @@ export function VotingPage() {
             </Text>
           );
         }
+        // Confirmed it is a landmark
+        saveUserIncorrectSelection(landmarks[0].description, userId);
         return (
           <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
             {"It is a landmark!"}
