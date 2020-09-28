@@ -52,8 +52,8 @@ export function VotingPage() {
         if (!landmarks || landmarks.length === 0) {
           return (
             <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
-              {"It is not a landmark!"}
-              <Text style={{ color: "#ED2939" }}> ✘</Text>
+              {"NOT A LANDMARK"}
+              {/* <Text style={{ color: "#ED2939" }}> ✘</Text>*/}
             </Text>
           );
         }
@@ -61,7 +61,7 @@ export function VotingPage() {
         saveUserCorrectSelection(landmarks[0].description, userId);
         return (
           <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
-            {"It is a landmark! "}
+            {"LANDMARK"}
             <Text style={{ color: "#28a745" }}>✔</Text>
           </Text>
         );
@@ -69,7 +69,7 @@ export function VotingPage() {
         if (!landmarks || landmarks.length === 0) {
           return (
             <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
-              {"It is not a landmark! "}
+              {"NOT A LANDMARK "}
               <Text style={{ color: "#28a745" }}>✔</Text>
             </Text>
           );
@@ -78,8 +78,8 @@ export function VotingPage() {
         saveUserIncorrectSelection(landmarks[0].description, userId);
         return (
           <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
-            {"It is a landmark!"}
-            <Text style={{ color: "#ED2939" }}>✘</Text>
+            {"LANDMARK"}
+            {/*  <Text style={{ color: "#ED2939" }}>✘</Text>*/}
           </Text>
         );
       default:
@@ -93,7 +93,6 @@ export function VotingPage() {
 
   return (
     <View style={styles.outerContainer}>
-      <Header text={"Read more"} />
       <View style={styles.container}>
         {setImageHeaderText()}
 
