@@ -42,9 +42,10 @@ export function CameraPage({ handlePhotoData }: any) {
       // Send photo file to backend and use vision api to validate if its a landmark or not
       const blob = await uriToBlob(newPhoto.uri);
       const photoId = `${anonymousUserId}${Date.now()}`;
+      console.log(photoId);
       const snapshot = await uploadImage(blob, photoId);
       // Api request here
-      const landmarkRes = await vision.validateLandmark(photoId);
+      const landmarkRes = await vision.validateLandmark(`${photoId}.jpg`);
       console.log(landmarkRes, "landmarkRes");
       await deleteImage(photoId);
       setIsLoading(false);

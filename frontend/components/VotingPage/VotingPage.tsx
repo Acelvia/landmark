@@ -52,7 +52,7 @@ export function VotingPage() {
         if (!landmarks || landmarks.length === 0) {
           return (
             <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
-              {"NOT A LANDMARK"}
+              {"NOT A LANDMARK "}
               {/* <Text style={{ color: "#ED2939" }}> ✘</Text>*/}
             </Text>
           );
@@ -62,7 +62,8 @@ export function VotingPage() {
         return (
           <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
             {"LANDMARK"}
-            <Text style={{ color: "#28a745" }}>✔</Text>
+            <Text> ✔</Text>
+            {/* style={{ color: "#28a745" }} */}
           </Text>
         );
       case 1: // I dont think its a landmark
@@ -70,7 +71,8 @@ export function VotingPage() {
           return (
             <Text style={{ ...styles.imageText, ...styles.flexChildGap }}>
               {"NOT A LANDMARK "}
-              <Text style={{ color: "#28a745" }}>✔</Text>
+              <Text> ✔</Text>
+              {/* style={{ color: "#28a745" }} */}
             </Text>
           );
         }
@@ -153,8 +155,7 @@ export function VotingPage() {
             I don't think it's a landmark
           </Text>
         </TouchableOpacity>
-        {/* Button ignoring last char for some reason */}
-        <Button title="back " onPress={() => history.push("/")}></Button>
+        {/*<Button title="back " onPress={() => history.push("/")}></Button> Button ignoring last char for some reason */}
       </View>
     </View>
   );
