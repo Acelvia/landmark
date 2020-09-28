@@ -23,7 +23,7 @@ exports.validateLandmark = functions.https.onRequest(async (req, res) => {
     console.log(req.body);
     // Performs label detection on the image file
     const bucketName = "landmark-e738f.appspot.com/uploads";
-    const fileName = `${req.body.photoId}.jpg`;
+    const fileName = `${req.body.photoId}`;
     const [result] = await client.landmarkDetection(
       `gs://${bucketName}/${fileName}`
     );
