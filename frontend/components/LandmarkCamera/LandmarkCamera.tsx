@@ -1,21 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Camera } from "expo-camera";
 import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
 import { CircleButton } from "../CircleButton/CircleButton";
+import { CameraContext } from "../../context/CameraContext";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
 const DESIRED_RATIO = "16:9";
 
 export function LandmarkCamera({ onPhoto, children }: any) {
-  const [hasPermission, setHasPermission] = useState(false);
+  // const [hasPermission, setHasPermission] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
+  const hasPermission: boolean = useContext(CameraContext);
   let cameraRef: any = null;
   let componentWillUnmount = false;
 
   useEffect(() => {
-    handleCameraPermission();
+    // handleCameraPermission();
 
     return () => {
       componentWillUnmount = true;
@@ -23,6 +25,7 @@ export function LandmarkCamera({ onPhoto, children }: any) {
     };
   }, []);
 
+  /*
   async function handleCameraPermission() {
     if (componentWillUnmount) {
       return;
@@ -31,7 +34,7 @@ export function LandmarkCamera({ onPhoto, children }: any) {
     setHasPermission(status === "granted");
     console.log(hasPermission, "has permission");
   }
-
+*/
   async function takePhoto(): Promise<any> {
     if (cameraRef !== null) {
       return await cameraRef.takePictureAsync();

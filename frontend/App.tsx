@@ -1,19 +1,27 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, YellowBox } from "react-native";
-import { NativeRouter } from "react-router-native";
+import { BackButton, NativeRouter } from "react-router-native";
 import { Routes } from "./components/Routes/Routes";
 import { AuthContext } from "./context/AuthContext";
 import { signInAnonymously } from "./helpers/firebase";
 import Firebase from "./helpers/firebase_init";
+import * as SplashScreen from "expo-splash-screen";
+import { Camera } from "expo-camera";
+import { CameraContext } from "./context/CameraContext";
 
 // No good fix for this, so this will do
 YellowBox.ignoreWarnings(["Setting a timer"]);
 
 export default function App() {
   const [userId, setUserId] = useState("");
+  const [appIsReady, setAppIsReady] = useState(false);
+  const [hasCameraPermission, setHasCameraPermission] = useState(false);
+  const [showCameraPage, setShowCameraPage] = useState(false);
   signInAnonymously();
   useEffect(() => {
+    SplashScreen.preventAutoHideAsync();
+    handleCameraPermission();
     const unlisten = Firebase.auth().onAuthStateChanged((user: any) => {
       user && user.uid ? setUserId(user.uid) : "";
     });
@@ -22,21 +30,40 @@ export default function App() {
     };
   }, []);
 
+  useEffect(() => {
+    if (userId && hasCameraPermission) {
+      hideSplashScreen();
+    }
+  }, [hasCameraPermission, userId]);
+
+  async function hideSplashScreen() {
+    await SplashScreen.hideAsync();
+    setAppIsReady(true);
+  }
+
+  async function handleCameraPermission() {
+    const { status } = await Camera.requestPermissionsAsync();
+    setHasCameraPermission(status === "granted");
+    console.log(hasCameraPermission, "has permission");
+  }
+
   return (
     <>
-      {userId ? (
-        <AuthContext.Provider value={userId}>
-          <NativeRouter>
-            <View style={styles.container}>
-              <Routes />
-              <StatusBar style="auto" />
-            </View>
-          </NativeRouter>
-        </AuthContext.Provider>
+      {appIsReady ? (
+        <CameraContext.Provider value={hasCameraPermission}>
+          <AuthContext.Provider value={userId}>
+            <NativeRouter>
+              <BackButton>
+                <View style={styles.container}>
+                  <Routes />
+                  <StatusBar style="auto" />
+                </View>
+              </BackButton>
+            </NativeRouter>
+          </AuthContext.Provider>
+        </CameraContext.Provider>
       ) : (
-        <View style={styles.container}>
-          <Text>Loading</Text>
-        </View>
+        <View style={styles.container}></View>
       )}
     </>
   );
