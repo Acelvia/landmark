@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet } from "react-native";
-import { Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+} from "react-native";
 import Header from "../Header";
 import LandmarkCamera from "../LandmarkCamera";
-import Loading from "../Loading";
 import { vision } from "../../helpers/api/vision";
 import { uriToBlob } from "../../helpers/uri";
 import { deleteImage, uploadImage } from "../../helpers/firebase";
@@ -43,7 +47,7 @@ export function CameraPage({ handlePhotoData }: any) {
       const blob = await uriToBlob(newPhoto.uri);
       const photoId = `${anonymousUserId}${Date.now()}`;
       console.log(photoId);
-      const snapshot = await uploadImage(blob, photoId);
+      await uploadImage(blob, photoId);
       // Api request here
       const landmarkRes = await vision.validateLandmark(`${photoId}.jpg`);
       console.log(landmarkRes, "landmarkRes");
@@ -59,7 +63,13 @@ export function CameraPage({ handlePhotoData }: any) {
 
   return (
     <>
-      {isLoading ? <Loading width={width} height={height} /> : <></>}
+      {isLoading ? (
+        <View style={styles.loaderContainer}>
+          <ActivityIndicator size="large" color="white" />
+        </View>
+      ) : (
+        <></>
+      )}
       <View style={styles.container}>
         <LandmarkCamera onPhoto={handleOnPhoto}>
           <Header text={"Is this a landmark ?"} />
@@ -73,5 +83,19 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     width,
+  },
+  loaderContainer: {
+    width,
+    height,
+    position: "absolute",
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 200,
+    backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
