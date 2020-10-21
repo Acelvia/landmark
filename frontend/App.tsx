@@ -1,13 +1,13 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, YellowBox } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { StyleSheet, View, YellowBox } from "react-native";
 import { BackButton, NativeRouter } from "react-router-native";
-import { Routes } from "./components/Routes/Routes";
-import { AuthContext } from "./context/AuthContext";
 import { signInAnonymously } from "./helpers/firebase";
 import Firebase from "./helpers/firebase_init";
 import * as SplashScreen from "expo-splash-screen";
 import { Camera } from "expo-camera";
+import { Routes } from "./components/Routes/Routes";
+import { AuthContext } from "./context/AuthContext";
 import { CameraContext } from "./context/CameraContext";
 
 // No good fix for this, so this will do
@@ -17,7 +17,6 @@ export default function App() {
   const [userId, setUserId] = useState("");
   const [appIsReady, setAppIsReady] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
-  const [showCameraPage, setShowCameraPage] = useState(false);
   signInAnonymously();
   useEffect(() => {
     SplashScreen.preventAutoHideAsync();

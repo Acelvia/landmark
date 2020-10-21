@@ -17,24 +17,12 @@ export function LandmarkCamera({ onPhoto, children }: any) {
   let componentWillUnmount = false;
 
   useEffect(() => {
-    // handleCameraPermission();
-
     return () => {
       componentWillUnmount = true;
       console.log("clean up");
     };
   }, []);
 
-  /*
-  async function handleCameraPermission() {
-    if (componentWillUnmount) {
-      return;
-    }
-    const { status } = await Camera.requestPermissionsAsync();
-    setHasPermission(status === "granted");
-    console.log(hasPermission, "has permission");
-  }
-*/
   async function takePhoto(): Promise<any> {
     if (cameraRef !== null) {
       return await cameraRef.takePictureAsync();
