@@ -107,12 +107,12 @@ export function VotingPage() {
         <VoteButton
           text="I think it's a landmark"
           disabled={disableVoteButton}
-          onPress={onAffirmativePress}
+          handleOnPress={onAffirmativePress}
         />
         <VoteButton
           text="I don't think it's a landmark"
           disabled={disableVoteButton}
-          onPress={onNegativePress}
+          handleOnPress={onNegativePress}
         />
         <Text style={{ ...styles.flexChildGap, ...styles.googleText }}>
           Select and see what Google thinks
