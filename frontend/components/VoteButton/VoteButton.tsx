@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity, Text, Dimensions, StyleSheet } from "react-native";
 
+// We're taking a "handleOnPress" prop here, but nothing seems to be passing it? VotingPage
+// passes "onPress" instead. Using TypeScript typings should help in spotting problems like this
 export function VoteButton({ disabled, handleOnPress, text }: any) {
   const [selected, setSelected] = useState(false);
   return (
@@ -12,7 +14,7 @@ export function VoteButton({ disabled, handleOnPress, text }: any) {
           : { ...styles.voteBtn, ...styles.flexChildGap }
       }
       onPress={() => {
-        handleOnPress(2);
+        handleOnPress(2); // handleOnPress(2)? What does the 2 mean? Would suggest enums.
         setSelected(true);
       }}
     >

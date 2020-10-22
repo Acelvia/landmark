@@ -2,6 +2,8 @@ import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
 
 export function CircleButton({ handleOnPress, disabled }: any) {
+  // Don't understand the passing of disabled to the TouchableOpacity here - if this is disabled, we aren't rendering the
+  // touchableopacity at all?
   return (
     <>
       {!disabled ? (

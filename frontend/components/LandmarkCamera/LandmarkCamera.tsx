@@ -4,17 +4,19 @@ import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
 import { CircleButton } from "../CircleButton/CircleButton";
 import { CameraContext } from "../../context/CameraContext";
 
+// I haven't seen this "full width; full height" thing done before in a React Native app.
+// Will need to figure out the purpose, but it feels like there might be a more typical way to achieve the same effect
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
 const DESIRED_RATIO = "16:9";
 
 export function LandmarkCamera({ onPhoto, children }: any) {
-  // const [hasPermission, setHasPermission] = useState(false);
+  // const [hasPermission, setHasPermission] = useState(false); // get rid of these :)
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   const hasPermission: boolean = useContext(CameraContext);
   let cameraRef: any = null;
-  let componentWillUnmount = false;
+  let componentWillUnmount = false; // What's the use of this variable? It gets set in the useEffect, but nothing is using it?
 
   useEffect(() => {
     return () => {

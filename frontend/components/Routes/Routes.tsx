@@ -5,16 +5,19 @@ import VotingPage from "../VotingPage";
 import { CurrentPhotoDataContext } from "../../context/CurrentPhotoDataContext";
 
 export function Routes(props: any) {
-  const [photoData, setPhotoData]: any = useState({ uri: "", landmarks: [] });
+  // Shouldn't take props if you don't use 'em
+  const [photoData, setPhotoData]: any = useState({ uri: "", landmarks: [] }); // typing stuff to "any" is generally a bad practice; add eslint to the project to weed these out
   const history = useHistory();
 
   useEffect(() => {
     if (photoData.uri) {
+      // This looks like we monitor the photoData contents and use it to change the route? If so, that's unusual, typically it's done differently
       history.push("/vote");
     }
   }, [photoData.uri]);
 
   function handleImageLocation(photoData: any) {
+    // What's the benefit of this function vs. just passing "setPhotoData" itself down?
     setPhotoData(photoData);
   }
 
