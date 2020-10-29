@@ -9,19 +9,10 @@ const height = Dimensions.get("window").height; //full height
 const DESIRED_RATIO = "16:9";
 
 export function LandmarkCamera({ onPhoto, children }: any) {
-  // const [hasPermission, setHasPermission] = useState(false);
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   const hasPermission: boolean = useContext(CameraContext);
   let cameraRef: any = null;
-  let componentWillUnmount = false;
-
-  useEffect(() => {
-    return () => {
-      componentWillUnmount = true;
-      console.log("clean up");
-    };
-  }, []);
 
   async function takePhoto(): Promise<any> {
     if (cameraRef !== null) {

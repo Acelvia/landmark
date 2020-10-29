@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, YellowBox } from "react-native";
+import { StyleSheet, View, LogBox } from "react-native";
 import { BackButton, NativeRouter } from "react-router-native";
 import { signInAnonymously } from "./helpers/firebase";
 import Firebase from "./helpers/firebase_init";
@@ -10,8 +10,7 @@ import { Routes } from "./components/Routes/Routes";
 import { AuthContext } from "./context/AuthContext";
 import { CameraContext } from "./context/CameraContext";
 
-// No good fix for this, so this will do
-YellowBox.ignoreWarnings(["Setting a timer"]);
+LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
   const [userId, setUserId] = useState("");
@@ -43,7 +42,6 @@ export default function App() {
   async function handleCameraPermission() {
     const { status } = await Camera.requestPermissionsAsync();
     setHasCameraPermission(status === "granted");
-    console.log(hasCameraPermission, "has permission");
   }
 
   return (

@@ -32,7 +32,7 @@ export function VotingPage() {
     try {
       setBase64Image(await uriToBase64(location));
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
   }
 

@@ -1,12 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-  Text,
-} from "react-native";
-import Header from "../Header";
+import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import LandmarkCamera from "../LandmarkCamera";
 import { vision } from "../../helpers/api/vision";
 import { uriToBlob } from "../../helpers/uri";
@@ -31,10 +24,9 @@ export function CameraPage({ handlePhotoData }: any) {
   async function handleOnPhoto(newPhoto: any): Promise<any> {
     try {
       setIsLoading(true);
-      // const newPhoto = await takePhoto();
       await handleNewPhoto(newPhoto);
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
   }
 
@@ -46,18 +38,16 @@ export function CameraPage({ handlePhotoData }: any) {
       // Send photo file to backend and use vision api to validate if its a landmark or not
       const blob = await uriToBlob(newPhoto.uri);
       const photoId = `${anonymousUserId}${Date.now()}`;
-      console.log(photoId);
       await uploadImage(blob, photoId);
       // Api request here
       const landmarkRes = await vision.validateLandmark(`${photoId}.jpg`);
-      console.log(landmarkRes, "landmarkRes");
       await deleteImage(photoId);
       setIsLoading(false);
       setLandmarks(landmarkRes);
       setUri(newPhoto.uri);
-    } catch (error) {
+    } catch (e) {
       setIsLoading(false);
-      console.log(error);
+      throw new Error(e);
     }
   }
 
@@ -71,9 +61,7 @@ export function CameraPage({ handlePhotoData }: any) {
         <></>
       )}
       <View style={styles.container}>
-        <LandmarkCamera onPhoto={handleOnPhoto}>
-          <Header text={"Is this a landmark ?"} />
-        </LandmarkCamera>
+        <LandmarkCamera onPhoto={handleOnPhoto} />
       </View>
     </>
   );
@@ -92,7 +80,6 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-
     alignItems: "center",
     justifyContent: "center",
     zIndex: 200,
