@@ -4,7 +4,6 @@ import { StyleSheet, View, LogBox } from "react-native";
 import { BackButton, NativeRouter } from "react-router-native";
 import { signInAnonymously } from "./helpers/firebase";
 import Firebase from "./helpers/firebase_init";
-import * as SplashScreen from "expo-splash-screen";
 import { Camera } from "expo-camera";
 import { Routes } from "./components/Routes/Routes";
 import { AuthContext } from "./context/AuthContext";
@@ -18,7 +17,6 @@ export default function App() {
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
   signInAnonymously();
   useEffect(() => {
-    SplashScreen.preventAutoHideAsync();
     handleCameraPermission();
     const unlisten = Firebase.auth().onAuthStateChanged((user: any) => {
       user && user.uid ? setUserId(user.uid) : "";
@@ -35,7 +33,6 @@ export default function App() {
   }, [hasCameraPermission, userId]);
 
   async function hideSplashScreen() {
-    await SplashScreen.hideAsync();
     setAppIsReady(true);
   }
 
