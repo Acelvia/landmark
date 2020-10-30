@@ -1,7 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { TouchableOpacity, Text, Dimensions, StyleSheet } from "react-native";
 
-export function VoteButton({ disabled, handleOnPress, text }: any) {
+interface Props {
+  disabled: boolean;
+  onPress: () => void;
+  text: string;
+}
+export function VoteButton({ disabled, onPress, text }: Props) {
   const [selected, setSelected] = useState(false);
   return (
     <TouchableOpacity
@@ -12,7 +17,7 @@ export function VoteButton({ disabled, handleOnPress, text }: any) {
           : { ...styles.voteBtn, ...styles.flexChildGap }
       }
       onPress={() => {
-        handleOnPress(2);
+        onPress();
         setSelected(true);
       }}
     >
