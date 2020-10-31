@@ -9,8 +9,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: cd frontend && yarn install --frozen-lockfile && cd ..
+      - name: cd frontend
+        run: cd frontend
 
-      - name: Run ESLint
-        run: cd frontend && yarn lint && cd ..
+      - name: Install frontend dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build frontend
+        run: yarn build
+
+      - name: Lint frontend
+        run: yarn lint && cd ..
