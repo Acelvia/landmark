@@ -1,8 +1,0 @@
-{
-  "name": "landmark-root",
-  "version": "1.0.0",
-  "description": "A demo app for Android and iOS that let's you agree or disagree with the Google Landmark API.",
-  "scripts": {
-    "lint": "cd frontend && yarn lint && cd .."
-  }
-}
