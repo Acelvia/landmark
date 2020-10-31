@@ -5,22 +5,24 @@ import VotingPage from "../VotingPage";
 import { CurrentPhotoDataContext } from "../../context/CurrentPhotoDataContext";
 
 export function Routes(props: any) {
-  const [photoData, setPhotoData]: any = useState({ uri: "", landmarks: [] });
+  const [uri, setUri] = useState("");
+  const [landmarks, setLandmarks] = useState([]);
   const history = useHistory();
 
   useEffect(() => {
-    if (photoData.uri) {
+    if (uri) {
       history.push("/vote");
     }
-  }, [photoData.uri]);
+  }, [uri]);
 
   function handleImageLocation(photoData: any) {
-    setPhotoData(photoData);
+    setUri(photoData.uri);
+    setLandmarks(photoData.landmarks);
   }
 
   return (
     <CurrentPhotoDataContext.Provider
-      value={{ uri: photoData.uri, landmarks: [] }}
+      value={{ uri: uri, setUri, landmarks: landmarks, setLandmarks }}
     >
       <Switch>
         <Route
