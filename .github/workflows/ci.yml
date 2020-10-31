@@ -9,14 +9,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: cd frontend
-        run: cd frontend
-
       - name: Install frontend dependencies
-        run: yarn install --frozen-lockfile
+        run: cd frontend && yarn install --frozen-lockfile
 
       - name: Build frontend
-        run: yarn build
+        run: cd frontend && yarn build
 
       - name: Lint frontend
-        run: yarn lint && cd ..
+        run: cd frontend && yarn lint
