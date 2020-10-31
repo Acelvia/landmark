@@ -1,19 +1,19 @@
-name: Lint frontend
+name: Build and lint
 on: push
 
 jobs:
-  lint-frontend:
+  build-and-lint:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Install frontend dependencies
-        run: cd frontend && yarn install --frozen-lockfile
+      - name: Install function dependencies
+        run: cd functions && npm ci
 
-      - name: Build frontend
-        run: cd frontend && yarn build
+      - name: Build functions
+        run: cd functions && npm run build
 
-      - name: Lint frontend
-        run: cd frontend && yarn lint
+      - name: Lint functions
+        run: cd functions && npm run lint
