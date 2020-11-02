@@ -26,3 +26,4 @@ functions/node_modules/
 keys
 keys/
 **/keys/*.json
+ui-debug.log
