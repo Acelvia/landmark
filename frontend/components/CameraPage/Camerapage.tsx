@@ -5,14 +5,16 @@ import { vision } from "../../helpers/api/vision";
 import { uriToBlob } from "../../helpers/uri";
 import { deleteImage, uploadImage } from "../../helpers/firebase";
 import { AuthContext } from "../../context/AuthContext";
+import { CurrentPhotoDataContext } from "../../context/CurrentPhotoDataContext";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
 
 export function CameraPage({ handlePhotoData }: any) {
+  const { uri, setUri, landmarks, setLandmarks } = useContext(
+    CurrentPhotoDataContext
+  );
   const [isLoading, setIsLoading] = useState(false);
-  const [uri, setUri] = useState("");
-  const [landmarks, setLandmarks] = useState([]);
   const anonymousUserId = useContext(AuthContext);
 
   useEffect(() => {
