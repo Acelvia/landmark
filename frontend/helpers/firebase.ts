@@ -9,12 +9,11 @@ export const uploadImage = (blob: any, photoId: string): Promise<any> => {
       .put(blob, {
         contentType: "image/jpeg",
       })
-      .then((snapshot) => {
+      .then((snapshot: any) => {
         blob.close();
-
         resolve(snapshot);
       })
-      .catch((error) => {
+      .catch((error: Error) => {
         reject(error);
       });
   });
@@ -27,18 +26,14 @@ export const deleteImage = (photoId: string): Promise<any> => {
       .child(`uploads/${photoId}.jpg`)
       .delete()
       .then(() => resolve())
-      .catch((error) => {
+      .catch((error: Error) => {
         reject(error);
       });
   });
 };
 
-export const signInAnonymously = (): void => {
-  Firebase.auth()
-    .signInAnonymously()
-    .catch((e: any) => {
-      throw new Error(e);
-    });
+export const signInAnonymously = (): Promise<any> => {
+   return Firebase.auth().signInAnonymously();
 };
 
 export const saveUserCorrectSelection = async (

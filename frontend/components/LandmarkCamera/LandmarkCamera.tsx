@@ -1,14 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { Camera } from "expo-camera";
 import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
 import { CircleButton } from "../CircleButton/CircleButton";
 import { CameraContext } from "../../context/CameraContext";
 
 const width = Dimensions.get("window").width; //full width
-const height = Dimensions.get("window").height; //full height
 const DESIRED_RATIO = "16:9";
-
-export function LandmarkCamera({ onPhoto, children }: any) {
+interface Props {
+  onPhoto: (photo: any) => Promise<any>;
+  children?: JSX.Element;
+}
+export function LandmarkCamera({ onPhoto, children }: Props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   const hasPermission: boolean = useContext(CameraContext);
@@ -20,7 +22,7 @@ export function LandmarkCamera({ onPhoto, children }: any) {
     }
   }
 
-  async function handleOnPress() {
+  async function onPress() {
     const newPhoto = await takePhoto();
     onPhoto(newPhoto);
   }
@@ -53,12 +55,12 @@ export function LandmarkCamera({ onPhoto, children }: any) {
       style={{ ...styles.container }}
       type={Camera.Constants.Type.back}
       onCameraReady={() => prepareRatio()}
-      ref={(ref) => {
+      ref={(ref: any) => {
         cameraRef = ref;
       }}
     >
       {children}
-      <CircleButton handleOnPress={handleOnPress} disabled={!isCameraReady} />
+      <CircleButton onPress={onPress} disabled={!isCameraReady} />
     </Camera>
   );
 }

@@ -1,7 +1,10 @@
 import React from "react";
 import { View, StyleSheet, TouchableOpacity } from "react-native";
-
-export function CircleButton({ handleOnPress, disabled }: any) {
+interface Props {
+  onPress: () => void;
+  disabled: boolean;
+}
+export function CircleButton({ onPress, disabled }: Props) {
   return (
     <>
       {!disabled ? (
@@ -9,7 +12,7 @@ export function CircleButton({ handleOnPress, disabled }: any) {
           <TouchableOpacity
             disabled={disabled}
             style={styles.cameraBtn}
-            onPress={() => handleOnPress()}
+            onPress={() => onPress()}
           >
             <View style={styles.cameraBtnInner}></View>
           </TouchableOpacity>
@@ -37,7 +40,7 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     alignItems: "center",
     justifyContent: "center",
-    borderColor: "red",
+    borderColor: "#2196F3",
     borderWidth: 1,
     padding: 1,
   },

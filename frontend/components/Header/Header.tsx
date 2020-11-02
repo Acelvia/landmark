@@ -1,8 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, Dimensions } from "react-native";
 const width = Dimensions.get("window").width;
-
-export function Header({ text }: any) {
+interface Props {
+  text: string;
+}
+export function Header({ text }: Props) {
   return (
     <View style={styles.header}>
       <Text style={styles.headerText}>{text}</Text>
@@ -14,8 +16,10 @@ const styles = StyleSheet.create({
   header: {
     width,
     height: 85,
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.8)",
     justifyContent: "center",
+    textAlign: "center",
+    paddingTop: 12,
   },
   headerText: {
     color: "white",

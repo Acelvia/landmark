@@ -9,12 +9,12 @@ export function Routes(props: any) {
   const [landmarks, setLandmarks] = useState([]);
   const history = useHistory();
 
-  useEffect(() => {
+  /*useEffect(() => {
     if (uri) {
       history.push("/vote");
     }
   }, [uri]);
-
+  */
   function handleImageLocation(photoData: any) {
     setUri(photoData.uri);
     setLandmarks(photoData.landmarks);
@@ -25,11 +25,7 @@ export function Routes(props: any) {
       value={{ uri: uri, setUri, landmarks: landmarks, setLandmarks }}
     >
       <Switch>
-        <Route
-          path="/"
-          exact
-          component={() => <CameraPage handlePhotoData={handleImageLocation} />}
-        />
+        <Route path="/" exact component={() => <CameraPage />} />
         <Route path="/vote" component={() => <VotingPage />} />
       </Switch>
     </CurrentPhotoDataContext.Provider>

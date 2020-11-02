@@ -1,34 +1,50 @@
-import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
+import React, { useState, useContext } from "react";
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+  ActivityIndicator,
+  Text,
+} from "react-native";
 import LandmarkCamera from "../LandmarkCamera";
+import LandmarkModal from "../LandmarkModal";
 import { vision } from "../../helpers/api/vision";
 import { uriToBlob } from "../../helpers/uri";
 import { deleteImage, uploadImage } from "../../helpers/firebase";
 import { AuthContext } from "../../context/AuthContext";
-import { CurrentPhotoDataContext } from "../../context/CurrentPhotoDataContext";
+import { uriToBase64 } from "../../helpers/uri";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
 
-export function CameraPage({ handlePhotoData }: any) {
-  const { uri, setUri, landmarks, setLandmarks } = useContext(
-    CurrentPhotoDataContext
-  );
+export function CameraPage() {
+  const [base64Image, setBase64Image] = useState("");
+  const [landmarkText, setLandmarkText] = useState("Is it a landmark ?");
   const [isLoading, setIsLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const anonymousUserId = useContext(AuthContext);
 
-  useEffect(() => {
-    if (uri) {
-      handlePhotoData({ uri, landmarks });
+  function evaluateLandmark(landmarks: any[]): string {
+    if (!landmarks || landmarks.length === 0) {
+      return "NOT A LANDMARK";
     }
-  }, [uri]);
+    return "LANDMARK ✔";
+  }
 
-  async function handleOnPhoto(newPhoto: any): Promise<any> {
+  async function setBase64Async(uri: string) {
+    try {
+      setBase64Image(await uriToBase64(uri));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async function onPhoto(newPhoto: any): Promise<any> {
     try {
       setIsLoading(true);
       await handleNewPhoto(newPhoto);
-    } catch (e) {
-      throw new Error(e);
+    } catch (error) {
+      throw error;
     }
   }
 
@@ -44,12 +60,13 @@ export function CameraPage({ handlePhotoData }: any) {
       // Api request here
       const landmarkRes = await vision.validateLandmark(`${photoId}.jpg`);
       await deleteImage(photoId);
+      await setBase64Async(newPhoto.uri);
       setIsLoading(false);
-      setLandmarks(landmarkRes);
-      setUri(newPhoto.uri);
-    } catch (e) {
+      setModalVisible(true);
+      setLandmarkText(evaluateLandmark(landmarkRes));
+    } catch (error) {
       setIsLoading(false);
-      throw new Error(e);
+      throw error;
     }
   }
 
@@ -57,13 +74,19 @@ export function CameraPage({ handlePhotoData }: any) {
     <>
       {isLoading ? (
         <View style={styles.loaderContainer}>
-          <ActivityIndicator size="large" color="white" />
+          <ActivityIndicator size="large" color="#2196F3" />
         </View>
       ) : (
         <></>
       )}
+      <LandmarkModal
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
+        landmarkText={landmarkText}
+        base64Image={base64Image}
+      />
       <View style={styles.container}>
-        <LandmarkCamera onPhoto={handleOnPhoto} />
+        <LandmarkCamera onPhoto={onPhoto} />
       </View>
     </>
   );
@@ -78,13 +101,10 @@ const styles = StyleSheet.create({
     width,
     height,
     position: "absolute",
-    left: 0,
-    right: 0,
-    top: 0,
     bottom: 0,
     alignItems: "center",
     justifyContent: "center",
-    zIndex: 200,
+    zIndex: 1,
     backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
