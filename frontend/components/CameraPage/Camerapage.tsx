@@ -4,7 +4,6 @@ import {
   StyleSheet,
   Dimensions,
   ActivityIndicator,
-  Text,
 } from "react-native";
 import LandmarkCamera from "../LandmarkCamera";
 import LandmarkModal from "../LandmarkModal";
