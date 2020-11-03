@@ -2,7 +2,7 @@ import Firebase, { db } from "./firebase_init";
 
 export const uploadImage = (blob: any, photoId: string): Promise<any> => {
   return new Promise((resolve, reject) => {
-    var storageRef = Firebase.storage().ref();
+    const storageRef = Firebase.storage().ref();
 
     storageRef
       .child(`uploads/${photoId}.jpg`)
@@ -21,7 +21,7 @@ export const uploadImage = (blob: any, photoId: string): Promise<any> => {
 
 export const deleteImage = (photoId: string): Promise<any> => {
   return new Promise((resolve, reject) => {
-    var storageRef = Firebase.storage().ref();
+    const storageRef = Firebase.storage().ref();
     storageRef
       .child(`uploads/${photoId}.jpg`)
       .delete()

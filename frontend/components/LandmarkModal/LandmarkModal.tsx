@@ -23,11 +23,11 @@ export function LandmarkModal({
   return (
     <Modal animationType="slide" transparent={true} visible={modalVisible}>
       <View style={styles.modalContainer}>
+      <Text style={styles.landmarkText}>{landmarkText}</Text>
         <Image
           style={{ width: 300, height: 320 }}
           source={{ uri: `data:image/gif;base64,${base64Image}` }}
         ></Image>
-        <Text style={styles.landmarkText}>{landmarkText}</Text>
         <TouchableHighlight
           style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
           onPress={() => {

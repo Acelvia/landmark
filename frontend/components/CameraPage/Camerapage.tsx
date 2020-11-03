@@ -1,17 +1,11 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  StyleSheet,
-  Dimensions,
-  ActivityIndicator,
-} from "react-native";
+import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import LandmarkCamera from "../LandmarkCamera";
 import LandmarkModal from "../LandmarkModal";
 import { vision } from "../../helpers/api/vision";
-import { uriToBlob } from "../../helpers/uri";
+import { uriToBlob, uriToBase64 } from "../../helpers/uri";
 import { deleteImage, uploadImage } from "../../helpers/firebase";
 import { AuthContext } from "../../context/AuthContext";
-import { uriToBase64 } from "../../helpers/uri";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
@@ -31,20 +25,12 @@ export function CameraPage() {
   }
 
   async function setBase64Async(uri: string) {
-    try {
-      setBase64Image(await uriToBase64(uri));
-    } catch (error) {
-      throw error;
-    }
+    setBase64Image(await uriToBase64(uri));
   }
 
   async function onPhoto(newPhoto: any): Promise<any> {
-    try {
-      setIsLoading(true);
-      await handleNewPhoto(newPhoto);
-    } catch (error) {
-      throw error;
-    }
+    setIsLoading(true);
+    await handleNewPhoto(newPhoto);
   }
 
   async function handleNewPhoto(newPhoto: any): Promise<any> {
