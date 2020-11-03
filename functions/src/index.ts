@@ -13,9 +13,9 @@ exports.validateLandmark = functions.https.onRequest(async (req, res) => {
     const [result] = await client.landmarkDetection(
       `gs://${bucketName}/${fileName}`
     );
-    const landmarks = result.landmarkAnnotations || [];
+    const landmarks: any[] = result.landmarkAnnotations || [];
     console.log("Landmarks:");
-    landmarks.forEach((landmark: any) => console.log(landmark));
+    landmarks.forEach((landmark) => console.log(landmark));
     res.send(landmarks);
   } catch (error) {
     console.error(error);
