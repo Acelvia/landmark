@@ -1,9 +1,13 @@
-import { http } from "../http";
-export const vision = {
-  validateLandmark,
-};
-const URL =
-  "https://us-central1-landmark-e738f.cloudfunctions.net/validateLandmark"; //"http://localhost:5001/landmark-e738f/us-central1/validateLandmark";
-async function validateLandmark(photoId: string): Promise<any> {
-  return await http.post(`${URL}`, { photoId });
+
+export async function validateLandmark(photoId: string): Promise<any[]> {
+  const projectId = "landmark-e738f"
+  const URL =`https://us-central1-${projectId}.cloudfunctions.net/validateLandmark`;
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({photoId}),
+  };
+  return await (await fetch(`${URL}`, requestOptions)).json();
 }

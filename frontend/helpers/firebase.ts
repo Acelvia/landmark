@@ -1,59 +1,39 @@
 import Firebase, { db } from "./firebase_init";
 
-export const uploadImage = (blob: any, photoId: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    const storageRef = Firebase.storage().ref();
+export async function uploadImage(blob: Blob, photoId: string): Promise<any> {
+  const storageRef = Firebase.storage().ref();
+  return await storageRef
+    .child(`uploads/${photoId}.jpg`)
+    .put(blob, { contentType: "image/jpeg" });
+}
 
-    storageRef
-      .child(`uploads/${photoId}.jpg`)
-      .put(blob, {
-        contentType: "image/jpeg",
-      })
-      .then((snapshot: any) => {
-        blob.close();
-        resolve(snapshot);
-      })
-      .catch((error: Error) => {
-        reject(error);
-      });
-  });
-};
+export async function deleteImage(photoId: string): Promise<any> {
+  const storageRef = Firebase.storage().ref();
+  storageRef.child(`uploads/${photoId}.jpg`).delete();
+}
 
-export const deleteImage = (photoId: string): Promise<any> => {
-  return new Promise((resolve, reject) => {
-    const storageRef = Firebase.storage().ref();
-    storageRef
-      .child(`uploads/${photoId}.jpg`)
-      .delete()
-      .then(() => resolve())
-      .catch((error: Error) => {
-        reject(error);
-      });
-  });
-};
+export function signInAnonymously(): Promise<any> {
+  return Firebase.auth().signInAnonymously();
+}
 
-export const signInAnonymously = (): Promise<any> => {
-   return Firebase.auth().signInAnonymously();
-};
-
-export const saveUserCorrectSelection = async (
+export async function saveUserCorrectSelection(
   landmarkDescription: string,
   userUid: string
-): Promise<any> => {
+): Promise<any> {
   await db
     .collection("landmarks")
     .doc(landmarkDescription)
     .collection("correct_answers")
     .add({ userUid });
-};
+}
 
-export const saveUserIncorrectSelection = async (
+export async function saveUserIncorrectSelection(
   landmarkDescription: string,
   userUid: string
-): Promise<any> => {
+): Promise<any> {
   await db
     .collection("landmarks")
     .doc(landmarkDescription)
     .collection("incorrect_answers")
     .add({ userUid });
-};
+}

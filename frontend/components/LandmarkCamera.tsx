@@ -1,20 +1,23 @@
-import React, { useContext, useState } from "react";
-import { Camera } from "expo-camera";
+import React, { useState } from "react";
+import { Camera, CameraCapturedPicture } from "expo-camera";
 import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
-import { CircleButton } from "../CircleButton/CircleButton";
-import { CameraContext } from "../../context/CameraContext";
+import { CircleButton } from "./CircleButton";
 
 const width = Dimensions.get("window").width; //full width
 const DESIRED_RATIO = "16:9";
 interface Props {
-  onPhoto: (photo: any) => Promise<any>;
+  onPhoto: (photo: CameraCapturedPicture) => Promise<any>;
+  hasCameraPermission: boolean;
   children?: JSX.Element;
 }
-export function LandmarkCamera({ onPhoto, children }: Props) {
+export function LandmarkCamera({
+  onPhoto,
+  hasCameraPermission,
+  children,
+}: Props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
-  const hasPermission: boolean = useContext(CameraContext);
-  let cameraRef: Camera | null = null;
+  let cameraRef: Camera;
 
   async function onPress() {
     if (cameraRef !== null) {
@@ -38,7 +41,7 @@ export function LandmarkCamera({ onPhoto, children }: Props) {
     }
   }
 
-  if (hasPermission === false) {
+  if (hasCameraPermission === false) {
     return (
       <View style={styles.centerTextContainer}>
         <Text>No access to camera</Text>

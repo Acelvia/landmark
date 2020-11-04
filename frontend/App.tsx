@@ -3,9 +3,7 @@ import { StyleSheet, View, LogBox } from "react-native";
 import { signInAnonymously } from "./helpers/firebase";
 import Firebase from "./helpers/firebase_init";
 import { Camera } from "expo-camera";
-import { AuthContext } from "./context/AuthContext";
-import { CameraContext } from "./context/CameraContext";
-import CameraPage from "./components/CameraPage";
+import { CameraPage } from "./components/CameraPage";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
@@ -42,13 +40,12 @@ export default function App() {
   return (
     <>
       {appIsReady ? (
-        <CameraContext.Provider value={hasCameraPermission}>
-          <AuthContext.Provider value={userId}>
-            <View style={styles.container}>
-              <CameraPage />
-            </View>
-          </AuthContext.Provider>
-        </CameraContext.Provider>
+        <View style={styles.container}>
+          <CameraPage
+            anonymousUserId={userId}
+            hasCameraPermission={hasCameraPermission}
+          />
+        </View>
       ) : (
         <View style={styles.container}></View>
       )}
