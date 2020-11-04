@@ -6,6 +6,7 @@ import { vision } from "../../helpers/api/vision";
 import { uriToBlob, uriToBase64 } from "../../helpers/uri";
 import { deleteImage, uploadImage } from "../../helpers/firebase";
 import { AuthContext } from "../../context/AuthContext";
+import { CameraCapturedPicture } from "expo-camera";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
@@ -28,12 +29,9 @@ export function CameraPage() {
     setBase64Image(await uriToBase64(uri));
   }
 
-  async function onPhoto(newPhoto: any): Promise<any> {
+  async function onPhoto(newPhoto: CameraCapturedPicture): Promise<any> {
     setIsLoading(true);
-    await handleNewPhoto(newPhoto);
-  }
 
-  async function handleNewPhoto(newPhoto: any): Promise<any> {
     try {
       if (!anonymousUserId) {
         throw new Error("No user");

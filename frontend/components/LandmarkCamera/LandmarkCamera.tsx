@@ -14,17 +14,13 @@ export function LandmarkCamera({ onPhoto, children }: Props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   const hasPermission: boolean = useContext(CameraContext);
-  let cameraRef: any = null;
-
-  async function takePhoto(): Promise<any> {
-    if (cameraRef !== null) {
-      return await cameraRef.takePictureAsync();
-    }
-  }
+  let cameraRef: Camera | null = null;
 
   async function onPress() {
-    const newPhoto = await takePhoto();
-    onPhoto(newPhoto);
+    if (cameraRef !== null) {
+      const photo = await cameraRef.takePictureAsync({ base64: true });
+      onPhoto(photo);
+    }
   }
 
   async function prepareRatio() {
@@ -55,7 +51,7 @@ export function LandmarkCamera({ onPhoto, children }: Props) {
       style={{ ...styles.container }}
       type={Camera.Constants.Type.back}
       onCameraReady={() => prepareRatio()}
-      ref={(ref: any) => {
+      ref={(ref: Camera) => {
         cameraRef = ref;
       }}
     >
