@@ -24,13 +24,9 @@ export default function App() {
 
   useEffect(() => {
     if (userId && hasCameraPermission) {
-      hideSplashScreen();
+      setAppIsReady(true);
     }
   }, [hasCameraPermission, userId]);
-
-  async function hideSplashScreen() {
-    setAppIsReady(true);
-  }
 
   async function handleCameraPermission() {
     const { status } = await Camera.requestPermissionsAsync();
