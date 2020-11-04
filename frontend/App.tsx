@@ -14,7 +14,7 @@ export default function App() {
   signInAnonymously();
   useEffect(() => {
     handleCameraPermission();
-    const unlisten = Firebase.auth().onAuthStateChanged((user: any) => {
+    const unlisten = Firebase.auth().onAuthStateChanged((user) => {
       user && user.uid ? setUserId(user.uid) : "";
     });
     return () => {
