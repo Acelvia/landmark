@@ -12,8 +12,10 @@ export async function deleteImage(photoId: string): Promise<any> {
   storageRef.child(`uploads/${photoId}.jpg`).delete();
 }
 
-export function signInAnonymously(): Promise<any> {
-  return Firebase.auth().signInAnonymously();
+export async function signInAnonymously(): Promise<
+  firebase.auth.UserCredential
+> {
+  return await Firebase.auth().signInAnonymously();
 }
 
 export async function saveUserCorrectSelection(

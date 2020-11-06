@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, LogBox } from "react-native";
 import { signInAnonymously } from "./helpers/firebase";
-import Firebase from "./helpers/firebase_init";
 import { Camera } from "expo-camera";
 import { CameraPage } from "./components/CameraPage";
 
@@ -9,24 +8,13 @@ LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
   const [userId, setUserId] = useState("");
-  const [appIsReady, setAppIsReady] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
-  signInAnonymously();
-  useEffect(() => {
-    handleCameraPermission();
-    const unlisten = Firebase.auth().onAuthStateChanged((user) => {
-      user && user.uid ? setUserId(user.uid) : "";
-    });
-    return () => {
-      unlisten();
-    };
-  }, []);
+  const appIsReady = !!userId && hasCameraPermission;
 
   useEffect(() => {
-    if (userId && hasCameraPermission) {
-      setAppIsReady(true);
-    }
-  }, [hasCameraPermission, userId]);
+    handleCameraPermission();
+    signInAnonymously().then(({ user }) => setUserId(user?.uid || ""));
+  }, []);
 
   async function handleCameraPermission() {
     const { status } = await Camera.requestPermissionsAsync();
@@ -34,18 +22,14 @@ export default function App() {
   }
 
   return (
-    <>
+    <View style={styles.container}>
       {appIsReady ? (
-        <View style={styles.container}>
-          <CameraPage
-            anonymousUserId={userId}
-            hasCameraPermission={hasCameraPermission}
-          />
-        </View>
-      ) : (
-        <View style={styles.container}></View>
-      )}
-    </>
+        <CameraPage
+          anonymousUserId={userId}
+          hasCameraPermission={hasCameraPermission}
+        />
+      ) : null}
+    </View>
   );
 }
 
