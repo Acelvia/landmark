@@ -30,10 +30,8 @@ export function LandmarkCamera({ onPhoto, children }: Props) {
         ratios.find((ratio: string) => ratio === DESIRED_RATIO) ||
         ratios[ratios.length - 1];
       setRatio(ratio);
-      setIsCameraReady(true);
-    } else {
-      setIsCameraReady(true);
     }
+    setIsCameraReady(true);
   }
 
   return (
