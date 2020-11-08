@@ -13,14 +13,6 @@ export function CameraPage() {
   const [base64Image, setBase64Image] = useState("");
   const [landmarkText, setLandmarkText] = useState("Is it a landmark ?");
   const [isLoading, setIsLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-
-  function evaluateLandmark(landmarks: any[]): string {
-    if (!landmarks || landmarks.length === 0) {
-      return "NOT A LANDMARK";
-    }
-    return "LANDMARK ✔";
-  }
 
   async function onPhoto(newPhoto: CameraCapturedPicture): Promise<any> {
     if (!newPhoto.base64) {
@@ -28,15 +20,10 @@ export function CameraPage() {
     }
     setIsLoading(true);
     try {
-      const photoId = `${Date.now()}`;
-      await uploadImage(await (await fetch(newPhoto.uri)).blob(), photoId);
-      setLandmarkText(
-        evaluateLandmark(await validateLandmark(`${photoId}.jpg`))
-      );
-      await deleteImage(photoId);
+      const landmark = await identifyLandmark(newPhoto.uri);
       setBase64Image(newPhoto.base64);
+      setLandmarkText(landmark || "Not a landmark");
       setIsLoading(false);
-      setModalVisible(true);
     } catch (error) {
       setIsLoading(false);
       throw error;
@@ -49,12 +36,9 @@ export function CameraPage() {
         <View style={styles.loaderContainer}>
           <ActivityIndicator size="large" color="#2196F3" />
         </View>
-      ) : (
-        <></>
-      )}
+      ) : null}
       <LandmarkModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+        closeModal={() => setBase64Image("")}
         landmarkText={landmarkText}
         base64Image={base64Image}
       />
@@ -63,6 +47,14 @@ export function CameraPage() {
       </View>
     </>
   );
+}
+
+async function identifyLandmark(uri: string): Promise<string | undefined> {
+  const photoId = `${Date.now()}`;
+  await uploadImage(await (await fetch(uri)).blob(), photoId);
+  const landmark = await validateLandmark(`${photoId}.jpg`);
+  deleteImage(photoId);
+  return landmark;
 }
 
 async function uploadImage(
