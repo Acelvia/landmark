@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, LogBox } from "react-native";
-import { signInAnonymously } from "./helpers/firebase";
 import { Camera } from "expo-camera";
 import { CameraPage } from "./components/CameraPage";
+import Firebase from "./helpers/firebase_init";
 
 LogBox.ignoreLogs(["Setting a timer"]);
 
@@ -13,7 +13,9 @@ export default function App() {
 
   useEffect(() => {
     handleCameraPermission();
-    signInAnonymously().then(({ user }) => setUserId(user?.uid || ""));
+    Firebase.auth()
+      .signInAnonymously()
+      .then(({ user }) => setUserId(user?.uid || ""));
   }, []);
 
   async function handleCameraPermission() {

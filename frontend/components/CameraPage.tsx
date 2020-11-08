@@ -3,8 +3,8 @@ import { View, StyleSheet, Dimensions, ActivityIndicator } from "react-native";
 import { LandmarkCamera } from "./LandmarkCamera";
 import { LandmarkModal } from "./LandmarkModal";
 import { validateLandmark } from "../helpers/api/vision";
-import { deleteImage, uploadImage } from "../helpers/firebase";
 import { CameraCapturedPicture } from "expo-camera";
+import Firebase from "../helpers/firebase_init";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
@@ -72,6 +72,21 @@ export function CameraPage({ anonymousUserId, hasCameraPermission }: Props) {
       </View>
     </>
   );
+}
+
+async function uploadImage(
+  blob: Blob,
+  photoId: string
+): Promise<firebase.storage.UploadTask> {
+  const storageRef = Firebase.storage().ref();
+  return await storageRef
+    .child(`uploads/${photoId}.jpg`)
+    .put(blob, { contentType: "image/jpeg" });
+}
+
+async function deleteImage(photoId: string): Promise<any> {
+  const storageRef = Firebase.storage().ref();
+  storageRef.child(`uploads/${photoId}.jpg`).delete();
 }
 
 const styles = StyleSheet.create({

@@ -2,7 +2,7 @@ import * as firebase from "firebase/app";
 import "firebase/storage";
 import "firebase/auth";
 import "firebase/firestore";
-const projectId = "landmark-e738f";
+export const projectId = "landmark-e738f";
 const firebaseConfig = {
   apiKey: "AIzaSyAr0T4Zf5TaqZJcz86y_XLwIQX5b3epkXM",
   authDomain: `${projectId}.firebaseapp.com`,
