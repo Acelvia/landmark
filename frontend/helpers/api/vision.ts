@@ -3,14 +3,14 @@ import { projectId } from "../firebase_init";
 interface IEntityAnnotation {
   mid?: string | null;
   locale?: string | null;
-  description?: string | null;
+  description?: string;
   score?: number | null;
   confidence?: number | null;
   topicality?: number | null;
 }
 export async function validateLandmark(
   photoId: string
-): Promise<IEntityAnnotation[]> {
+): Promise<string | undefined> {
   const URL = `https://us-central1-${projectId}.cloudfunctions.net/validateLandmark`;
   const requestOptions = {
     method: "POST",
@@ -19,5 +19,11 @@ export async function validateLandmark(
     },
     body: JSON.stringify({ photoId }),
   };
-  return await (await fetch(`${URL}`, requestOptions)).json();
+  const landmarks: IEntityAnnotation[] = await (
+    await fetch(`${URL}`, requestOptions)
+  ).json();
+  if (landmarks.length !== 0) {
+    return landmarks[0].description;
+  }
+  return;
 }
