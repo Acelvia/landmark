@@ -12,7 +12,6 @@ export function LandmarkCamera({ onPhoto }: Props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   let cameraRef: Camera;
-
   async function onPress() {
     if (cameraRef !== null) {
       const photo = await cameraRef.takePictureAsync({ base64: true });
@@ -38,7 +37,7 @@ export function LandmarkCamera({ onPhoto }: Props) {
       ratio={ratio}
       style={{ ...styles.container }}
       type={Camera.Constants.Type.back}
-      onCameraReady={() => prepareRatio()}
+      onCameraReady={prepareRatio}
       ref={(ref: Camera) => {
         cameraRef = ref;
       }}
