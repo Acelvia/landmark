@@ -5,23 +5,17 @@ interface Props {
   disabled: boolean;
 }
 export function CircleButton({ onPress, disabled }: Props) {
-  return (
-    <>
-      {!disabled ? (
-        <View style={styles.cameraBtnContainer}>
-          <TouchableOpacity
-            disabled={disabled}
-            style={styles.cameraBtn}
-            onPress={() => onPress()}
-          >
-            <View style={styles.cameraBtnInner}></View>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <></>
-      )}
-    </>
-  );
+  return !disabled ? (
+    <View style={styles.cameraBtnContainer}>
+      <TouchableOpacity
+        disabled={disabled}
+        style={styles.cameraBtn}
+        onPress={onPress}
+      >
+        <View style={styles.cameraBtnInner}></View>
+      </TouchableOpacity>
+    </View>
+  ) : null;
 }
 
 const styles = StyleSheet.create({
