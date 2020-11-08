@@ -40,7 +40,7 @@ export function CameraPage({ anonymousUserId, hasCameraPermission }: Props) {
         evaluateLandmark(await validateLandmark(`${photoId}.jpg`))
       );
       await deleteImage(photoId);
-      await setBase64Image(newPhoto.base64);
+      setBase64Image(newPhoto.base64);
       setIsLoading(false);
       setModalVisible(true);
     } catch (error) {
