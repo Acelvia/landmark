@@ -12,21 +12,16 @@ export default function App() {
   const appIsReady = !!userId && hasCameraPermission;
 
   useEffect(() => {
-    handleCameraPermission();
-    Firebase.auth()
-      .signInAnonymously()
-      .then(({ user }) => setUserId(user?.uid || ""));
+    (async () => {
+      const { user } = await Firebase.auth().signInAnonymously();
+      setUserId(user?.uid || "");
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasCameraPermission(status === "granted");
+    })();
   }, []);
 
-  async function handleCameraPermission() {
-    const { status } = await Camera.requestPermissionsAsync();
-    setHasCameraPermission(status === "granted");
-  }
-
   return (
-    <View style={styles.container}>
-      {appIsReady ? <CameraPage /> : <Text>No camera access or user id</Text>}
-    </View>
+    <View style={styles.container}>{appIsReady ? <CameraPage /> : null}</View>
   );
 }
 
