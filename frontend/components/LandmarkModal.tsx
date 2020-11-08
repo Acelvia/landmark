@@ -9,30 +9,26 @@ import {
 } from "react-native";
 
 interface Props {
-  modalVisible: boolean;
   base64Image: string;
   landmarkText: string;
-  setModalVisible: (modalVisible: boolean) => void;
+  closeModal: () => void;
 }
 export function LandmarkModal({
-  modalVisible,
   base64Image,
   landmarkText,
-  setModalVisible,
+  closeModal,
 }: Props) {
   return (
-    <Modal animationType="slide" transparent={true} visible={modalVisible}>
+    <Modal animationType="slide" transparent={true} visible={!!base64Image}>
       <View style={styles.modalContainer}>
         <Text style={styles.landmarkText}>{landmarkText}</Text>
         <Image
-          style={{ width: 300, height: 320 }}
+          style={{ ...styles.image }}
           source={{ uri: `data:image/jpg;base64,${base64Image}` }}
         />
         <TouchableHighlight
           style={{ ...styles.openButton }}
-          onPress={() => {
-            setModalVisible(!modalVisible);
-          }}
+          onPress={closeModal}
         >
           <Text style={styles.textStyle}>OK</Text>
         </TouchableHighlight>
@@ -53,6 +49,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     elevation: 2,
+  },
+  image: {
+    width: 300,
+    height: 320,
   },
   landmarkText: {
     color: "white",
