@@ -10,9 +10,8 @@ const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
 interface Props {
   anonymousUserId: string;
-  hasCameraPermission: boolean;
 }
-export function CameraPage({ anonymousUserId, hasCameraPermission }: Props) {
+export function CameraPage({ anonymousUserId }: Props) {
   const [base64Image, setBase64Image] = useState("");
   const [landmarkText, setLandmarkText] = useState("Is it a landmark ?");
   const [isLoading, setIsLoading] = useState(false);
@@ -65,10 +64,7 @@ export function CameraPage({ anonymousUserId, hasCameraPermission }: Props) {
         base64Image={base64Image}
       />
       <View style={styles.container}>
-        <LandmarkCamera
-          hasCameraPermission={hasCameraPermission}
-          onPhoto={onPhoto}
-        />
+        <LandmarkCamera onPhoto={onPhoto} />
       </View>
     </>
   );

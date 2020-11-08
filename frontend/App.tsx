@@ -25,12 +25,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {appIsReady ? (
-        <CameraPage
-          anonymousUserId={userId}
-          hasCameraPermission={hasCameraPermission}
-        />
-      ) : null}
+      {appIsReady ? <CameraPage anonymousUserId={userId} /> : null}
     </View>
   );
 }

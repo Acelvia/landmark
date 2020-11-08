@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import { Camera, CameraCapturedPicture } from "expo-camera";
-import { View, Text, StyleSheet, Dimensions, Platform } from "react-native";
+import { StyleSheet, Dimensions, Platform } from "react-native";
 import { CircleButton } from "./CircleButton";
 
 const width = Dimensions.get("window").width; //full width
 const DESIRED_RATIO = "16:9";
 interface Props {
   onPhoto: (photo: CameraCapturedPicture) => Promise<any>;
-  hasCameraPermission: boolean;
   children?: JSX.Element;
 }
-export function LandmarkCamera({
-  onPhoto,
-  hasCameraPermission,
-  children,
-}: Props) {
+export function LandmarkCamera({ onPhoto, children }: Props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   let cameraRef: Camera;
@@ -41,13 +36,6 @@ export function LandmarkCamera({
     }
   }
 
-  if (hasCameraPermission === false) {
-    return (
-      <View style={styles.centerTextContainer}>
-        <Text>No access to camera</Text>
-      </View>
-    );
-  }
   return (
     <Camera
       ratio={ratio}
