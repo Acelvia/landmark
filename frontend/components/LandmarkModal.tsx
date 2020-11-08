@@ -26,7 +26,7 @@ export function LandmarkModal({
         <Text style={styles.landmarkText}>{landmarkText}</Text>
         <Image
           style={{ width: 300, height: 320 }}
-          source={{ uri: `data:image/gif;base64,${base64Image}` }}
+          source={{ uri: `data:image/jpg;base64,${base64Image}` }}
         />
         <TouchableHighlight
           style={{ ...styles.openButton }}
