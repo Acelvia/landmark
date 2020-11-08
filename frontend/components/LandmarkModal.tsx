@@ -23,20 +23,18 @@ export function LandmarkModal({
   return (
     <Modal animationType="slide" transparent={true} visible={modalVisible}>
       <View style={styles.modalContainer}>
-      <Text style={styles.landmarkText}>{landmarkText}</Text>
+        <Text style={styles.landmarkText}>{landmarkText}</Text>
         <Image
           style={{ width: 300, height: 320 }}
           source={{ uri: `data:image/gif;base64,${base64Image}` }}
-        ></Image>
+        />
         <TouchableHighlight
-          style={{ ...styles.openButton, backgroundColor: "#2196F3" }}
+          style={{ ...styles.openButton }}
           onPress={() => {
             setModalVisible(!modalVisible);
           }}
         >
-          <Text style={styles.textStyle}>
-            {"  "}OK{"  "}
-          </Text>
+          <Text style={styles.textStyle}>OK</Text>
         </TouchableHighlight>
       </View>
     </Modal>
@@ -51,7 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   openButton: {
-    backgroundColor: "#F194FF",
+    backgroundColor: "#2196F3",
     borderRadius: 20,
     padding: 10,
     elevation: 2,
@@ -63,5 +61,6 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     textAlign: "center",
+    width: 42,
   },
 });

@@ -7,9 +7,8 @@ const width = Dimensions.get("window").width; //full width
 const DESIRED_RATIO = "16:9";
 interface Props {
   onPhoto: (photo: CameraCapturedPicture) => Promise<any>;
-  children?: JSX.Element;
 }
-export function LandmarkCamera({ onPhoto, children }: Props) {
+export function LandmarkCamera({ onPhoto }: Props) {
   const [isCameraReady, setIsCameraReady] = useState(false);
   const [ratio, setRatio] = useState("");
   let cameraRef: Camera;
@@ -44,7 +43,6 @@ export function LandmarkCamera({ onPhoto, children }: Props) {
         cameraRef = ref;
       }}
     >
-      {children}
       <CircleButton onPress={onPress} disabled={!isCameraReady} />
     </Camera>
   );
