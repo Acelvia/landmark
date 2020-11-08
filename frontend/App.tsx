@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, View, LogBox } from "react-native";
+import { StyleSheet, View, LogBox, Text } from "react-native";
 import { Camera } from "expo-camera";
 import { CameraPage } from "./components/CameraPage";
 import Firebase from "./helpers/firebase_init";
@@ -25,7 +25,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      {appIsReady ? <CameraPage anonymousUserId={userId} /> : null}
+      {appIsReady ? <CameraPage /> : <Text>No camera access or user id</Text>}
     </View>
   );
 }

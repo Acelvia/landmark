@@ -8,10 +8,8 @@ import Firebase from "../helpers/firebase_init";
 
 const width = Dimensions.get("window").width; //full width
 const height = Dimensions.get("window").height; //full height
-interface Props {
-  anonymousUserId: string;
-}
-export function CameraPage({ anonymousUserId }: Props) {
+
+export function CameraPage() {
   const [base64Image, setBase64Image] = useState("");
   const [landmarkText, setLandmarkText] = useState("Is it a landmark ?");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,10 +28,7 @@ export function CameraPage({ anonymousUserId }: Props) {
     }
     setIsLoading(true);
     try {
-      if (!anonymousUserId) {
-        throw new Error("No user");
-      }
-      const photoId = `${anonymousUserId}${Date.now()}`;
+      const photoId = `${Date.now()}`;
       await uploadImage(await (await fetch(newPhoto.uri)).blob(), photoId);
       setLandmarkText(
         evaluateLandmark(await validateLandmark(`${photoId}.jpg`))
