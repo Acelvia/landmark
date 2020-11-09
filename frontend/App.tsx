@@ -13,10 +13,10 @@ export default function App() {
 
   useEffect(() => {
     (async () => {
-      const { user } = await Firebase.auth().signInAnonymously();
-      setUserId(user?.uid || "");
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasCameraPermission(status === "granted");
+      setUserId((await Firebase.auth().signInAnonymously())?.user?.uid || "");
+      setHasCameraPermission(
+        (await Camera.requestPermissionsAsync()).status === "granted"
+      );
     })();
   }, []);
 
