@@ -17,6 +17,9 @@ frontend/.DS_Store
 **/*.js
 **/*.js.map
 
+# But not .eslintrc.js
+!**/.eslintrc.js
+
 # TypeScript v1 declaration files
 typings/
 
@@ -26,3 +29,4 @@ functions/node_modules/
 keys
 keys/
 **/keys/*.json
+ui-debug.log

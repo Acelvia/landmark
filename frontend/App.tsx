@@ -1,70 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View, YellowBox } from "react-native";
-import { BackButton, NativeRouter } from "react-router-native";
-import { signInAnonymously } from "./helpers/firebase";
-import Firebase from "./helpers/firebase_init";
-import * as SplashScreen from "expo-splash-screen";
+import { StyleSheet, View, LogBox } from "react-native";
 import { Camera } from "expo-camera";
-import { Routes } from "./components/Routes/Routes";
-import { AuthContext } from "./context/AuthContext";
-import { CameraContext } from "./context/CameraContext";
+import { CameraPage } from "./components/CameraPage";
+import Firebase from "./helpers/firebase_init";
 
-// No good fix for this, so this will do
-YellowBox.ignoreWarnings(["Setting a timer"]);
+LogBox.ignoreLogs(["Setting a timer"]);
 
 export default function App() {
   const [userId, setUserId] = useState("");
-  const [appIsReady, setAppIsReady] = useState(false);
   const [hasCameraPermission, setHasCameraPermission] = useState(false);
-  signInAnonymously();
+  const appIsReady = !!userId && hasCameraPermission;
+
   useEffect(() => {
-    SplashScreen.preventAutoHideAsync();
-    handleCameraPermission();
-    const unlisten = Firebase.auth().onAuthStateChanged((user: any) => {
-      user && user.uid ? setUserId(user.uid) : "";
-    });
-    return () => {
-      unlisten();
-    };
+    (async () => {
+      const { user } = await Firebase.auth().signInAnonymously();
+      setUserId(user?.uid || "");
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasCameraPermission(status === "granted");
+    })();
   }, []);
 
-  useEffect(() => {
-    if (userId && hasCameraPermission) {
-      hideSplashScreen();
-    }
-  }, [hasCameraPermission, userId]);
-
-  async function hideSplashScreen() {
-    await SplashScreen.hideAsync();
-    setAppIsReady(true);
-  }
-
-  async function handleCameraPermission() {
-    const { status } = await Camera.requestPermissionsAsync();
-    setHasCameraPermission(status === "granted");
-    console.log(hasCameraPermission, "has permission");
-  }
-
   return (
-    <>
-      {appIsReady ? (
-        <CameraContext.Provider value={hasCameraPermission}>
-          <AuthContext.Provider value={userId}>
-            <NativeRouter>
-              <BackButton>
-                <View style={styles.container}>
-                  <Routes />
-                  <StatusBar style="auto" />
-                </View>
-              </BackButton>
-            </NativeRouter>
-          </AuthContext.Provider>
-        </CameraContext.Provider>
-      ) : (
-        <View style={styles.container}></View>
-      )}
-    </>
+    <View style={styles.container}>{appIsReady ? <CameraPage /> : null}</View>
   );
 }
 
